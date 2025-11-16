@@ -10,6 +10,7 @@ export const useStore = create(
       favorites: [],
       recentViews: [],
       searchTerm: "",
+      darkMode: false,
 
       addToCart: (product) => {
         const cart = get().cart;
@@ -67,6 +68,12 @@ export const useStore = create(
         const updated = [product, ...recent].slice(0, 8);
         set({ recentViews: updated });
       },
+
+      toggleDarkMode: () => {
+        const newMode = !get().darkMode;
+        set({ darkMode: newMode });
+        document.documentElement.classList.toggle("dark", newMode);
+      },
     }),
     {
       name: "techstore-storage",
@@ -74,6 +81,7 @@ export const useStore = create(
         cart: state.cart,
         favorites: state.favorites,
         recentViews: state.recentViews,
+        darkMode: state.darkMode,
       }),
     }
   )

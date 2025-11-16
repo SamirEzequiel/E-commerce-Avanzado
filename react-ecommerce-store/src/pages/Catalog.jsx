@@ -10,6 +10,7 @@ const ORDER_OPTIONS = [
 
 function Catalog() {
   const products = useStore((state) => state.products);
+  const searchTerm = useStore((state) => state.searchTerm);
   const [category, setCategory] = useState("all");
   const [rating, setRating] = useState("all");
   const [order, setOrder] = useState("newest");
@@ -22,6 +23,17 @@ function Catalog() {
 
   const filtered = useMemo(() => {
     let result = [...products];
+
+    // Búsqueda por término
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(term) ||
+          p.description.toLowerCase().includes(term) ||
+          p.category.toLowerCase().includes(term)
+      );
+    }
 
     result = result.filter(
       (p) => p.price >= priceRange[0] && p.price <= priceRange[1]
@@ -48,7 +60,7 @@ function Catalog() {
     }
 
     return result;
-  }, [products, category, rating, order, priceRange]);
+  }, [products, searchTerm, category, rating, order, priceRange]);
 
   return (
     <section className="space-y-10">
